@@ -35,12 +35,12 @@ router.post('/register',isNotLoggedIn,authController.register);
 // 로그인
 router.post('/login',isNotLoggedIn,authController.login)
 // 로그아웃
-router.get('/logout',isLoggedIn,authController.logout);
+router.get('/logout',authController.logout);
 // 이미지  Amazon S3 버킷에 업로드
-router.post('/thumbnail',isLoggedIn,upload.single('photo'),uploadImage);
+router.post('/thumbnail',upload.single('photo'),uploadImage);
 // 사용자 정보 수정
-router.put('/',isLoggedIn,authController.changeUserinfo);
+router.put('/',authController.changeUserinfo);
 // 사용자 정보 중 비밀번호 수정
-router.patch('/',isLoggedIn,authController.changePassword);
+router.patch('/',authController.changePassword);
 
 module.exports=router;
