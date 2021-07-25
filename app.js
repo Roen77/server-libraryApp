@@ -61,6 +61,7 @@ app.use(express.urlencoded({extended:false}));
 
 // app.set('trust proxy', true);
 // app.use(cookie(process.env.COOKIE_KEY));
+app.set('trust proxy', 1)
 const sessionOption = {
   resave: false,
   saveUninitialized: true,
@@ -71,10 +72,10 @@ const sessionOption = {
   },
 };
 if (prod) {
-  sessionOption.proxy = true;
+  // sessionOption.proxy = true;
   // sessionOption.cookie.SameSite='none'
-  sessionOption.cookie.samesite='none'
-  // sessionOption.cookie.secure = true;
+  sessionOption.cookie.sameSite='none'
+  sessionOption.cookie.secure = true;
 }
 app.use(session(sessionOption));
 // passport 초기화
