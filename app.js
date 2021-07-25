@@ -73,8 +73,8 @@ const sessionOption = {
 };
 if (prod) {
   sessionOption.proxy = true;
-  // sessionOption.cookie.SameSite='none'
-  // sessionOption.cookie.sameSite='none'
+  sessionOption.cookie.SameSite='none'
+  // sessionOption.cookie.sameSite=false
   // sessionOption.cookie.secure = true;
 }
 app.use(session(sessionOption));
