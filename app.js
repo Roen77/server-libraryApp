@@ -9,6 +9,7 @@ const session = require('express-session');
 const cookie = require('cookie-parser');
 const passport = require('passport');
 const {sequelize} = require('./models');
+const prod=process.env.NODE_ENV === 'production'
 const PORT= 5000;
 dotenv.config();
 const logger = require('./logger');
@@ -43,7 +44,7 @@ sequelize.sync()
 });
 passporConfig();
 
-if (process.env.NODE_ENV === 'production') {
+if (prod) {
   app.use(morgan('combined'));
   app.use(helmet());
   app.use(hpp());
@@ -75,8 +76,8 @@ app.get('/',(req,res)=>{
   })
 })
 
-
-app.listen(PORT,()=>{
-    console.log(`${PORT}번에서 실행중`)
-    logger.info(`${PORT}`);
+// test
+app.listen(prod?process.env.PORT:PORT,()=>{
+    console.log(`${prod?process.env.PORT:PORT}번에서 실행중`)
+    logger.info(`${prod?process.env.PORT:PORT}`);
 });
