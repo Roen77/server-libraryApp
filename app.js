@@ -70,11 +70,11 @@ const sessionOption = {
     secure: false,
   },
 };
-// if (prod) {
-//   sessionOption.proxy = true;
-//   // sessionOption.cookie.sameSite='none'
-//   // sessionOption.cookie.secure = true;
-// }
+if (prod) {
+  // sessionOption.proxy = true;
+  sessionOption.cookie.SameSite='none'
+  // sessionOption.cookie.secure = true;
+}
 app.use(session(sessionOption));
 // passport 초기화
 app.use(passport.initialize());
