@@ -10,7 +10,7 @@ const session = require('express-session');
 const passport = require('passport');
 const {sequelize} = require('./models');
 const prod=process.env.NODE_ENV === 'production'
-const PORT= 5000;
+const PORT= 5001;
 dotenv.config();
 const logger = require('./logger');
 // 라우터
@@ -72,7 +72,7 @@ const sessionOption = {
   },
 };
 if (prod) {
-  // sessionOption.proxy = true;
+  sessionOption.proxy = true;
   // sessionOption.cookie.SameSite='none'
   sessionOption.cookie.sameSite='none'
   sessionOption.cookie.secure = true;
