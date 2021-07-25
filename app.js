@@ -22,16 +22,30 @@ const app =express();
 
 
 app.use(cookie(process.env.COOKIE_KEY));
-app.use(session({
-  maxAge:24*60*60*1000,
+const sessionOption = {
   resave: false,
   saveUninitialized: false,
   secret: process.env.COOKIE_KEY,
   cookie: {
     httpOnly: true,
     secure: false,
-  }
-}));
+  },
+};
+if (prod) {
+  sessionOption.proxy = true;
+  // sessionOption.cookie.secure = true;
+}
+app.use(session(sessionOption));
+// app.use(session({
+//   maxAge:24*60*60*1000,
+//   resave: false,
+//   saveUninitialized: false,
+//   secret: process.env.COOKIE_KEY,
+//   cookie: {
+//     httpOnly: true,
+//     secure: false,
+//   }
+// }));
 
 // db 연결
 sequelize.sync()
