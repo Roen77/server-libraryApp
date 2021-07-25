@@ -71,7 +71,7 @@ const sessionOption = {
   },
 };
 if (prod) {
-  // sessionOption.proxy = true;
+  sessionOption.proxy = true;
   // sessionOption.cookie.SameSite='none'
   sessionOption.cookie.samesite='none'
   // sessionOption.cookie.secure = true;
