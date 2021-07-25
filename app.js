@@ -20,23 +20,7 @@ const profileRouter=require('./router/profile')
 
 const app =express();
 
-app.set('trust proxy', true);
-// app.use(cookie(process.env.COOKIE_KEY));
-const sessionOption = {
-  resave: false,
-  saveUninitialized: true,
-  secret: process.env.COOKIE_KEY,
-  cookie: {
-    httpOnly: true,
-    secure: false,
-  },
-};
-if (prod) {
-  sessionOption.proxy = true;
-  sessionOption.cookie.sameSite='none'
-  // sessionOption.cookie.secure = true;
-}
-app.use(session(sessionOption));
+
 // app.use(session({
 //   maxAge:24*60*60*1000,
 //   resave: false,
@@ -75,6 +59,23 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 
+// app.set('trust proxy', true);
+// app.use(cookie(process.env.COOKIE_KEY));
+const sessionOption = {
+  resave: false,
+  saveUninitialized: true,
+  secret: process.env.COOKIE_KEY,
+  cookie: {
+    httpOnly: true,
+    secure: false,
+  },
+};
+// if (prod) {
+//   sessionOption.proxy = true;
+//   // sessionOption.cookie.sameSite='none'
+//   // sessionOption.cookie.secure = true;
+// }
+app.use(session(sessionOption));
 // passport 초기화
 app.use(passport.initialize());
 app.use(passport.session());
