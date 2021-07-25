@@ -14,7 +14,8 @@ module.exports ={
       "password": process.env.SEQUELIZE_PASSWORD,
       "database": "library_test",
       "host": "127.0.0.1",
-      "dialect": "postgres"
+      "dialect": "postgres",
+      "port":5432
     },
     "production": {
       "username": "postgres",
@@ -22,7 +23,8 @@ module.exports ={
       "database": "library_production",
       "host": "127.0.0.1",
       "dialect": "postgres",
-      logging: false
+      logging: false,
+      "port":5432
     }
   }
   
