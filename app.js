@@ -6,7 +6,7 @@ const hpp = require('hpp');
 const dotenv=require('dotenv');
 const passporConfig=require('./passport');
 const session = require('express-session');
-// const cookie = require('cookie-parser');
+const cookie = require('cookie-parser');
 const passport = require('passport');
 const {sequelize} = require('./models');
 const prod=process.env.NODE_ENV === 'production'
@@ -60,8 +60,8 @@ app.use(express.json());
 app.use(express.urlencoded({extended:false}));
 
 // app.set('trust proxy', true);
-// app.use(cookie(process.env.COOKIE_KEY));
 app.set('trust proxy', 1)
+app.use(cookie(process.env.COOKIE_KEY));
 const sessionOption = {
   resave: false,
   saveUninitialized: true,
