@@ -75,7 +75,7 @@ if (prod) {
   sessionOption.proxy = true;
   sessionOption.cookie.sameSite='none'
   // sessionOption.cookie.sameSite=false
-  // sessionOption.cookie.secure = true;
+  sessionOption.cookie.secure = true;
 }
 app.use(session(sessionOption));
 // passport 초기화
