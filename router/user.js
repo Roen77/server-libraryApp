@@ -35,7 +35,7 @@ router.post('/register',isNotLoggedIn,authController.register);
 // 로그인
 router.post('/login',isNotLoggedIn,authController.login)
 // 로그아웃
-router.get('/logout',isLoggedIn,authController.logout);
+router.get('/logout',authController.logout);
 // 이미지  Amazon S3 버킷에 업로드
 router.post('/thumbnail',isLoggedIn,upload.single('photo'),uploadImage);
 // 사용자 정보 수정
