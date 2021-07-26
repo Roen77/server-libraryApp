@@ -79,12 +79,12 @@ const sessionOption = {
     domain: prod && '.roen.pe.kr',
   },
 };
-if (prod) {
-  sessionOption.proxy = true;
-  // sessionOption.cookie.sameSite='none'
-  // sessionOption.cookie.sameSite=false
-  // sessionOption.cookie.secure = true;
-}
+// if (prod) {
+//   sessionOption.proxy = true;
+//   // sessionOption.cookie.sameSite='none'
+//   // sessionOption.cookie.sameSite=false
+//   sessionOption.cookie.secure = true;
+// }
 app.use(session(sessionOption));
 // passport 초기화
 app.use(passport.initialize());
