@@ -71,7 +71,7 @@ app.use(express.urlencoded({extended:false}));
 app.use(cookie(process.env.COOKIE_KEY));
 const sessionOption = {
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   secret: process.env.COOKIE_KEY,
   cookie: {
     httpOnly: true,
