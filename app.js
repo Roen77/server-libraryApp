@@ -47,14 +47,21 @@ if (prod) {
   app.use(morgan('combined'));
   app.use(helmet());
   app.use(hpp());
-} else {
-  app.use(morgan('dev'));
-}
-// cors 에러 방지
+  // cors 에러 방지
 app.use(cors({
-  origin:['http://localhost:3000','http://localhost:5000','https://nuxt-libraryapp.herokuapp.com'],
+  origin:'http://vue.roen.pe.kr',
     credentials: true,
 }));
+
+} else {
+  app.use(morgan('dev'));
+  // cors 에러 방지
+app.use(cors({
+  origin:['http://localhost:3000','http://localhost:5000'],
+    credentials: true,
+}));
+
+}
 
 app.use(express.json());
 app.use(express.urlencoded({extended:false}));
