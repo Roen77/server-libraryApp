@@ -76,6 +76,7 @@ const sessionOption = {
   cookie: {
     httpOnly: true,
     secure: false,
+    domain: prod && '.roen.pe.kr',
   },
 };
 if (prod) {
