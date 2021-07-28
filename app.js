@@ -10,7 +10,7 @@ const session = require('express-session');
 const passport = require('passport');
 const {sequelize} = require('./models');
 const prod=process.env.NODE_ENV === 'production'
-const PORT= 5001;
+const PORT= 5000;
 dotenv.config();
 const logger = require('./logger');
 // 라우터
@@ -49,7 +49,7 @@ if (prod) {
   app.use(hpp());
   // cors 에러 방지
 app.use(cors({
-  origin:'http://vue.roen.pe.kr',
+  origin:'https://vue.roen.pe.kr',
     credentials: true,
 }));
 
