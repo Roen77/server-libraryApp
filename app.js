@@ -4,9 +4,9 @@ const cors=require('cors');
 const helmet = require('helmet');
 const hpp = require('hpp');
 const dotenv=require('dotenv');
-const passporConfig=require('./passport');
+const passporConfig=reqquire('./passport');
 const session = require('express-session');
-// const cookie = require('cookie-parser');
+const cookie = require('cookie-parser');
 const passport = require('passport');
 const {sequelize} = require('./models');
 const prod=process.env.NODE_ENV === 'production'
@@ -20,17 +20,6 @@ const profileRouter=require('./router/profile')
 
 const app =express();
 
-
-// app.use(session({
-//   maxAge:24*60*60*1000,
-//   resave: false,
-//   saveUninitialized: false,
-//   secret: process.env.COOKIE_KEY,
-//   cookie: {
-//     httpOnly: true,
-//     secure: false,
-//   }
-// }));
 
 // db 연결
 sequelize.sync()
@@ -68,7 +57,7 @@ app.use(express.urlencoded({extended:false}));
 
 // app.set('trust proxy', true);
 // app.set('trust proxy', 1)
-// app.use(cookie(process.env.COOKIE_KEY));
+app.use(cookie(process.env.COOKIE_KEY));
 const sessionOption = {
   resave: false,
   saveUninitialized: false,
@@ -79,12 +68,12 @@ const sessionOption = {
     domain: prod && '.roen.pe.kr',
   },
 };
-// if (prod) {
-//   sessionOption.proxy = true;
-//   // sessionOption.cookie.sameSite='none'
-//   // sessionOption.cookie.sameSite=false
-//   sessionOption.cookie.secure = true;
-// }
+if (prod) {
+  sessionOption.proxy = true;
+  // sessionOption.cookie.sameSite='none'
+  // sessionOption.cookie.sameSite=false
+  sessionOption.cookie.secure = true;
+}
 app.use(session(sessionOption));
 // passport 초기화
 app.use(passport.initialize());
