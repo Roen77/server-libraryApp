@@ -3,14 +3,19 @@ const db = require('../models');
 const { Op } = require("sequelize");
 require('dotenv').config();
 
-const getBooks = () =>{
-    
+const bookchk=(res,book)=>{
+    if(!book){
+        return res.status(404).json({
+            msg:'요청해주신 책은 존재하지 않습니다.'
+        })
+    }
 }
+
 module.exports={
     // 카카오 검색
     kakaosearch(req,res,next){
         //통합 검색
-        const api_url='https://dapi.kakao.com/v3/search/book?query=' + encodeURI(req.query.query);
+        const api_url='https://dapi.kakao.com/v3/search/book?query=' + encodeURI(decodeURIComponent(req.query.query));
         let  option={
             size:req.query.size,
             page:req.query.page
@@ -57,7 +62,7 @@ module.exports={
                 msg:'책이 성공적으로 추가되었습니다.'
             })
         }else{
-            return res.status(400).json({
+            return res.status(200).json({
                 success:false,
                 msg:'이미 추가된 책입니다.'
             })
@@ -109,7 +114,9 @@ module.exports={
            return
         } catch (error) {
             console.error(error);
-            return next(error);
+            return res.status(500).json({
+                msg:'요청해주신 책들을 불러오지 못했습니다.'
+            })
         }
     },
     // 책 가져오기
@@ -126,19 +133,26 @@ module.exports={
             model:db.User,
             as:'Likers',
             attributes:['username']
-        }]})    
-            res.json({
+        }]})   
+        bookchk(res,book)
+        return res.json({
                 success:true,
                 book,
             })
         } catch (error) {
             console.error(error);
-            return next(error);
+            return res.status(500).json({
+                msg:'요청해주신 책은 존재하지 않습니다.'
+            })
         }
     },
     // 책 삭제하기
     async deleteBook(req,res,next){
         try {
+            const book=await db.Book.findOne({where:{
+                [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }]    
+                }})
+            bookchk(res,book)
             await db.Book.destroy({where:{
                 [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }],      
                 }})
@@ -154,8 +168,12 @@ module.exports={
     // 책 수정
     async updateBook(req,res,next){
         try {
+            const exbook=await db.Book.findOne({where:{
+                [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }]     
+                }})
+            bookchk(res,exbook)
             const {title,contents,url,isbn,authors,publisher,datetime} = req.body;
-            let thumbnail=req.file?req.file.location:null
+            let thumbnail=req.file?req.file.location:req.body.photo
           await db.Book.update({
                 title,contents,url,isbn,authors,publisher,datetime,
                 thumbnail
@@ -163,7 +181,7 @@ module.exports={
                 [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }]      
                 }})
 
-                const book=  await db.Book.findOne({where:{
+                const book= await db.Book.findOne({where:{
                     [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }],      
                     },
                     include:[{
@@ -285,7 +303,9 @@ module.exports={
         })
         } catch (error) {
             console.error(error);
-            return next(error);
+            return res.status(500).json({
+                msg:'요청해주신 책들을 불러오지 못했습니다.'
+            })
         }
     },
     // 다른 사용자의 책 가져오기
@@ -305,14 +325,17 @@ module.exports={
                 model:db.User,
                 as:'Likers',
                 attributes:['username']
-            }]})    
+            }]}) 
+            bookchk(res,book) 
             res.json({
                 success:true,
                 book,
             })
         } catch (error) {
-            console.error(error);
-            return next(error);
+             console.error(error);
+            return res.status(500).json({
+                msg:'요청해주신 책은 존재하지 않습니다.'
+            })
         }
     },
     // 다른사람 책 좋아요
@@ -322,9 +345,7 @@ module.exports={
                 where:{
                     [Op.and]: [{ UserId:{[Op.ne]:req.user.id} }, { id: req.params.bookId }],    
             }})
-            if(!book){
-                return res.status(404).send('해당 책이 존재하지 않습니다.');
-            }
+            bookchk(res,book)
             await book.addLiker(req.user.id)
             res.json({ userId: req.user.id });
         } catch (error) {
@@ -339,9 +360,7 @@ module.exports={
                 where:{
                     [Op.and]: [{ UserId:{[Op.ne]:req.user.id} }, { id: req.params.bookId }],    
             }})
-            if(!book){
-                return res.status(404).send('해당 책이 존재하지 않습니다.');
-            }
+            bookchk(res,book)
             await  book.removeLiker(req.user.id)
             res.json({ userId: req.user.id });
         } catch (error) {

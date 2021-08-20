@@ -24,11 +24,9 @@ module.exports=()=>{
               provider:profile.provider,
     
           })
-          console.log('new User created',profile._json.email);
         return  done(null,newUser)
   
         }else{
-            console.log('이미 유저가 있습니다.', profile)
            return done(null,exUser)
         }
       // User.findOrCreate({ googleId: profile.id }, function (err, user) {

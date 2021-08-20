@@ -57,7 +57,6 @@ module.exports={
             Format(comments)
             Format(likes,true)
             Format(likers,true)
-            console.log()
             res.json({
                 bookmarks,   
                 likes,

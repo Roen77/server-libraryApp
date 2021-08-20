@@ -101,6 +101,13 @@ module.exports={
                         attributes:['id','username']
                     }]
             }]})
+
+            if(!books.length){
+                return res.status(404).json({
+                     success:false,
+                     msg:'요청해주신 책이 존재하지 않습니다.'
+                 })
+             }
            const totalCount=books.length
            res.json({
                success:true,
@@ -112,7 +119,10 @@ module.exports={
            return
         } catch (error) {
             console.error(error);
-            return next(error);
+            return res.status(500).json({
+                success:false,
+                msg:'요청해주신 책이 존재하지 않습니다.'
+            })
         }
     }
 }

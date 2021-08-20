@@ -23,11 +23,9 @@ module.exports=()=>{
               provider:profile.provider,
     
           })
-          console.log('new User created',profile);
         return  done(null,newUser)
   
         }else{
-            console.log('이미 유저가 있습니다.', profile)
            return done(null,exUser)
         }
       } catch (error) {

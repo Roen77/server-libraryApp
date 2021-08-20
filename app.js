@@ -4,7 +4,7 @@ const cors=require('cors');
 const helmet = require('helmet');
 const hpp = require('hpp');
 const dotenv=require('dotenv');
-const passporConfig=reqquire('./passport');
+const passporConfig=require('./passport')
 const session = require('express-session');
 const cookie = require('cookie-parser');
 const passport = require('passport');
@@ -41,7 +41,6 @@ app.use(cors({
   origin:'https://vue.roen.pe.kr',
     credentials: true,
 }));
-
 } else {
   app.use(morgan('dev'));
   // cors 에러 방지

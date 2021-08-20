@@ -28,7 +28,7 @@ module.exports = class Book extends Sequelize.Model {
         allowNull:true,
       },
       thumbnail: {
-        type: Sequelize.STRING(250),
+        type: Sequelize.STRING,
         allowNull:true,
       },
       datetime: {

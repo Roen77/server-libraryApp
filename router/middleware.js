@@ -3,7 +3,10 @@ exports.isLoggedIn = (req, res, next) => {
     if (req.isAuthenticated()) {
         return next();
       }
-    return res.status(401).send('로그인이 필요합니다.');
+    return res.status(401).json({
+      msg:'로그인이 필요합니다.',
+      auth:true
+    })
   };
 
   // 로그인 불필요
@@ -11,6 +14,9 @@ exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
         return next();
     }
-    return res.status(401).send('로그인한 사람은 할 수 없습니다..');
+    return res.status(401).json({
+      msg:'이미 로그인되어 있어 사용할 수 없습니다.',
+      authed:true
+    })
   };
   

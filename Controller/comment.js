@@ -50,16 +50,14 @@ module.exports={
             let page=req.query.page?req.query.page:1
             let  where={BookId:req.params.bookId}
             // lastId 가 있다면 다음요소를 10개씩 가져온다.
-            console.log('id인식',req.params.bookId)
-            console.log('리밋인식',parseInt(req.query.limit || 10))
-            console.log('조건인식', where)
             if (parseInt(req.query.lastId, 10)) {
                 where={[Op.and]: [{BookId:req.params.bookId},{id: {
                     [Op.lt]: parseInt(req.query.lastId, 10), // less than
                   }}]}
             }
+                console.log(where,'조건절 확인좀')
                 const comments = await db.Comment.findAll({
-                    where:{BookId:req.params.bookId},
+                    where,
                     include:[{
                     model:db.User,
                     attributes:['id','username','thumbnail']
@@ -67,22 +65,14 @@ module.exports={
                     limit:parseInt(req.query.limit || 10),
                     order:[['updatedAt','DESC']]}
                     ) 
-                    // 댓글의 전채 갯수
-                    const commentsss = await db.Comment.findAll({
-                        where:{BookId:req.params.bookId}
-                    }) 
             const totalCount=await db.Comment.count({where:{BookId:req.params.bookId}})
-            console.log(commentsss,'코멘트는가져오는ㄴ건가')
-            console.log(totalCount,'???????????????????장난까나?')
             res.json({
                 success:true,
                 comments,
                 page,
                 commentCount:totalCount,
                 // 마지막 페이지 유무 확인
-                end:Math.ceil(totalCount/limit) === parseInt(page,10)?true:false,
-                test:'아니 이걸호출하는거임???????????????????????????',
-                testcom:commentsss 
+                end:Math.ceil(totalCount/limit) === parseInt(page,10)?true:false
             })
         } catch (error) {
             console.error(error);
