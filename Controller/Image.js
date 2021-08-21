@@ -20,8 +20,9 @@ upload=multer({
         },
         key:function(req,file,cb){
             cb(null,Date.now().toString())
-        }
-    })
+        },
+    }),
+    limits: { fileSize: 20 * 1024 * 1024 },
 }),
 
 
