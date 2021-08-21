@@ -6,14 +6,14 @@ require("dotenv").config();
 aws.config.update({
     secretAccessKey:process.env.AWSSECRETKEY,
     accessKeyId:process.env.AWSACCESSKEYID,
-    region:'ap-northeast-2'
+    region:'us-west-1'
 })
 let s3= new aws.S3();
 
 upload=multer({
     storage:multer3({
         s3:s3,
-        bucket:"am-clone",
+        bucket:"myimageslist",
         acl:'public-read',
         metadata:function(req,file,cb){
             cb(null,{fieldName:file.fieldname})
