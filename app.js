@@ -16,7 +16,9 @@ const logger = require('./logger');
 // 라우터
 const userRouter= require('./router/user');
 const bookRouter=require('./router/books');
+const hashtagRouter=require('./router/hashtags')
 const profileRouter=require('./router/profile')
+
 
 const app =express();
 
@@ -80,6 +82,7 @@ app.use(passport.session());
 
 app.use('/user',userRouter);
 app.use('/books',bookRouter)
+app.use('/hashtags',hashtagRouter)
 app.use('/profiles',profileRouter);
 
 

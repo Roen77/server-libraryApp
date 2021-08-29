@@ -47,9 +47,9 @@ module.exports={
             const {title,contents,url,isbn,authors,publisher,datetime} = req.body;
             // 책제목과 isbn,책저자가 같은 책이 있는 지 찾는다.
         const book=await db.Book.findOne({where:{
-            [Op.and]: [{ UserId:req.user.id },{title:title},{isbn:isbn},{publisher:publisher}],    
+            [Op.and]: [{ UserId:req.user.id },{title:title},{isbn:isbn},{publisher:publisher}],
         }})
-        //  Amazon S3 버킷을 이용해 이미지를 저장한 후 req.file이 있다면, location를 저장하고,없다면 req.body.thumbnail를 저장한다. 
+        //  Amazon S3 버킷을 이용해 이미지를 저장한 후 req.file이 있다면, location를 저장하고,없다면 req.body.thumbnail를 저장한다.
         let thumbnail=req.file?req.file.location:req.body.thumbnail
         //  책제목과 isbn,책저자가 같은 책이 없다면 새로운 책을 추가한다.
         if(!book){
@@ -71,7 +71,7 @@ module.exports={
             console.error(error);
             return next(error);
         }
-        
+
     },
     // 책들 가져오기
     async fetchBooks(req,res,next){
@@ -123,17 +123,17 @@ module.exports={
     async fetcbBook(req,res,next){
         try {
           const book=  await db.Book.findOne({where:{
-            [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }],      
+            [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }],
             },
         include:[{
             model:db.Hashtag,
             as:'Hashtags',
-            
+
         },{
             model:db.User,
             as:'Likers',
             attributes:['username']
-        }]})   
+        }]})
         bookchk(res,book)
         return res.json({
                 success:true,
@@ -150,11 +150,11 @@ module.exports={
     async deleteBook(req,res,next){
         try {
             const book=await db.Book.findOne({where:{
-                [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }]    
+                [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }]
                 }})
             bookchk(res,book)
             await db.Book.destroy({where:{
-                [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }],      
+                [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }],
                 }})
             return res.json({
                 success:true,
@@ -169,7 +169,7 @@ module.exports={
     async updateBook(req,res,next){
         try {
             const exbook=await db.Book.findOne({where:{
-                [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }]     
+                [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }]
                 }})
             bookchk(res,exbook)
             const {title,contents,url,isbn,authors,publisher,datetime} = req.body;
@@ -178,11 +178,11 @@ module.exports={
                 title,contents,url,isbn,authors,publisher,datetime,
                 thumbnail
             },{where:{
-                [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }]      
+                [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }]
                 }})
 
                 const book= await db.Book.findOne({where:{
-                    [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }],      
+                    [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }],
                     },
                     include:[{
                         model:db.Comment,
@@ -204,7 +204,7 @@ module.exports={
         try {
             // bookmark 속성값으로 북마크 유무를 수정해준다.
             await db.Book.update({bookmark:true},{where:{
-                [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }],        
+                [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }],
             }})
             return res.json({
                 success:true,
@@ -219,7 +219,7 @@ module.exports={
     async removeBookmark(req,res,next){
         try {
             await db.Book.update({bookmark:false},{where:{
-                [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }],        
+                [Op.and]: [{ UserId:req.user.id }, { id: req.params.bookId }],
             }})
             return res.json({
                 success:true,
@@ -240,12 +240,13 @@ module.exports={
             const offset=page?page*limit:0;
             // 책 검색 시,
             if(req.query.search && req.query.target){
+                const target=req.query.target.replace(/%/gi, "\\%");
                 switch (req.query.search) {
                     // 책 제목으로 검색
                     case "책제목":
                         where={[Op.and]:[{UserId:{[Op.ne]:req.user.id}},{
                             title:{
-                                [Op.like]:`%${decodeURIComponent(req.query.target)}%`
+                                [Op.like]:`%${target}%`
                             }
                         }]}
                       break;
@@ -253,13 +254,14 @@ module.exports={
                     case "저자":
                       where={[Op.and]:[{UserId:{[Op.ne]:req.user.id}},{
                             authors:{
-                                [Op.like]:`%${decodeURIComponent(req.query.target)}%`
+                                [Op.like]:`%${target}%`
                             }
                         }]}
                     break;
                     default:
                         break;
                 }
+                console.log(target, typeof target,'타겟확인')
             }else{
                 // 다른 사용자의 책일 때
                 where={UserId:{[Op.ne]:req.user.id}}
@@ -302,6 +304,7 @@ module.exports={
             totalPage:Math.ceil(totalCount/limit)?Math.ceil(totalCount/limit):0
         })
         } catch (error) {
+            console.log(req.query.target,'오류좀..')
             console.error(error);
             return res.status(500).json({
                 msg:'요청해주신 책들을 불러오지 못했습니다.'
@@ -313,7 +316,7 @@ module.exports={
         try {
           const book=  await db.Book.findOne({
             where:{
-            [Op.and]: [{ UserId:{[Op.ne]:req.user.id} }, { id: req.params.bookId }],      
+            [Op.and]: [{ UserId:{[Op.ne]:req.user.id} }, { id: req.params.bookId }],
             },
             include:[{
                 model:db.User,
@@ -325,8 +328,8 @@ module.exports={
                 model:db.User,
                 as:'Likers',
                 attributes:['username']
-            }]}) 
-            bookchk(res,book) 
+            }]})
+            bookchk(res,book)
             res.json({
                 success:true,
                 book,
@@ -343,7 +346,7 @@ module.exports={
         try {
             const book = await db.Book.findOne({
                 where:{
-                    [Op.and]: [{ UserId:{[Op.ne]:req.user.id} }, { id: req.params.bookId }],    
+                    [Op.and]: [{ UserId:{[Op.ne]:req.user.id} }, { id: req.params.bookId }],
             }})
             bookchk(res,book)
             await book.addLiker(req.user.id)
@@ -358,7 +361,7 @@ module.exports={
         try {
             const book = await db.Book.findOne({
                 where:{
-                    [Op.and]: [{ UserId:{[Op.ne]:req.user.id} }, { id: req.params.bookId }],    
+                    [Op.and]: [{ UserId:{[Op.ne]:req.user.id} }, { id: req.params.bookId }],
             }})
             bookchk(res,book)
             await  book.removeLiker(req.user.id)

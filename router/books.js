@@ -28,13 +28,7 @@ router.patch('/:bookId/addbookmark',isLoggedIn,bookController.addBookmark)
 // 북마크 삭제
 router.patch('/:bookId/removebookmark',isLoggedIn,bookController.removeBookmark)
 
-// 내 책 해시태그 추가/삭제/해시태그 책 가져오기
-// 해시태그 추가
-router.post('/:bookId/addhashtags',isLoggedIn,hashController.addHashtag)
-// 해시태그 삭제
-router.delete('/:bookId/removehashtag/:hashtagId',isLoggedIn,hashController.removeHashtag)
-// 해시태그 가져오기
-router.get('/hashtags/:hashtagName',isLoggedIn,hashController.getHashtagBooks)
+
 
 // 코멘트
 // 코멘트 가져오기
@@ -54,6 +48,8 @@ router.get('/others/book/:bookId',isLoggedIn,bookController.otherFetchBook)
 router.post('/others/book/:bookId/addLike',isLoggedIn,bookController.otheraddLike)
 // 다른 사용자의 책 좋아요 삭제
 router.delete('/others/book/:bookId/removeLike',isLoggedIn,bookController.otherremoveLike)
+
+
 
 
 module.exports=router;

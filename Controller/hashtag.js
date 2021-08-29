@@ -8,7 +8,7 @@ module.exports={
         try {
             const book = await db.Book.findOne({
                 where:{
-                    [Op.and]: [{ UserId:req.user.id}, { id: req.params.bookId }],    
+                    [Op.and]: [{ UserId:req.user.id}, { id: req.params.bookId }],
             }})
             if(!book){
                return res.status(404).json({
@@ -33,7 +33,7 @@ module.exports={
             }))
             // 해시태그 추가
             await book.addHashtags(hashtagList.map(hashtag=>hashtag[0]))
-           
+
             res.json({
                 msg:'해시태그 추가 완료되었습니다.',
                 // hashtagList:newhashtagList,
@@ -49,7 +49,7 @@ module.exports={
         try {
             const book = await db.Book.findOne({
                 where:{
-                    [Op.and]: [{ UserId:req.user.id}, { id: req.params.bookId }],    
+                    [Op.and]: [{ UserId:req.user.id}, { id: req.params.bookId }],
             }})
             if(!book){
                return res.status(404).json({
@@ -61,7 +61,7 @@ module.exports={
                 await book.removeHashtag(req.params.hashtagId)
             res.json({
                 msg:'해시태그 삭제 완료되었습니다.',
-             
+
             })
         } catch (error) {
             console.error(error);
@@ -75,14 +75,14 @@ module.exports={
             let page=req.query.page;
             let limit=12;
             const offset=page?page*limit:0;
-
-           const books= await db.Book.findAll({
+            console.log(req.query.name,'알아서인코딩??')
+            const books= await db.Book.findAll({
                limit,
                offset,
                 order:[['createdAt','DESC']],
                 include:[{
                     model:db.Hashtag,
-                    where: { name:decodeURIComponent(req.params.hashtagName)},
+                    where: {name:req.query.name},
                     as:'Hashtags',
                 },
                 {
@@ -118,10 +118,11 @@ module.exports={
            })
            return
         } catch (error) {
-            console.error(error);
+            console.log('eeeeee??????????????????',req.query.name);
             return res.status(500).json({
                 success:false,
-                msg:'요청해주신 책이 존재하지 않습니다.'
+                msg:'요청해주신 책이 존재하지 않습니다.',
+                error
             })
         }
     }
