@@ -85,6 +85,7 @@ module.exports={
     // 책들 가져오기
     async fetchBooks(req,res,next){
         try {
+            console.log('내 책')
             let page=req.query.page;
             // 12개씩 가져오기
             let limit=12;
@@ -243,6 +244,7 @@ module.exports={
     // 내 책이 아닌 다른 사용자의 책은 검색할 수  있도록 구현
     async otherFetchBooks(req,res,next){
         try {
+            console.log('다른사용자의 책')
             let page=req.query.page;
             let limit=12;
             let where;
