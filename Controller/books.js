@@ -3,6 +3,14 @@ const db = require('../models');
 const { Op } = require("sequelize");
 require('dotenv').config();
 
+
+const decodeURIComponentSafe =s => {
+    if (!s) {
+      return s;
+    }
+    return decodeURIComponent(s.replace(/%(?![0-9][0-9a-fA-F]+)/g, "%25"));
+  }
+
 const bookchk=(res,book)=>{
     if(!book){
         return res.status(404).json({
@@ -15,7 +23,8 @@ module.exports={
     // 카카오 검색
     kakaosearch(req,res,next){
         //통합 검색
-        const api_url='https://dapi.kakao.com/v3/search/book?query=' + encodeURI(decodeURIComponent(req.query.query));
+        console.log('인코딩:',encodeURIComponent(req.query.query))
+        const api_url='https://dapi.kakao.com/v3/search/book?query=' + encodeURIComponent(req.query.query);
         let  option={
             size:req.query.size,
             page:req.query.page
@@ -240,7 +249,9 @@ module.exports={
             const offset=page?page*limit:0;
             // 책 검색 시,
             if(req.query.search && req.query.target){
-                const target=req.query.target.replace(/%/gi, "\\%");
+               const target= decodeURIComponentSafe(req.query.target)
+                console.log('서버에서 확인',req.query.search,req.query.target,'새로운 타겟:',target)
+                // const target=req.query.target.replace(/%/gi, "\\%");
                 switch (req.query.search) {
                     // 책 제목으로 검색
                     case "책제목":
@@ -261,7 +272,6 @@ module.exports={
                     default:
                         break;
                 }
-                console.log(target, typeof target,'타겟확인')
             }else{
                 // 다른 사용자의 책일 때
                 where={UserId:{[Op.ne]:req.user.id}}
