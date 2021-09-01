@@ -23,8 +23,8 @@ module.exports={
     // 카카오 검색
     kakaosearch(req,res,next){
         //통합 검색
-        console.log('인코딩:',encodeURIComponent(req.query.query))
-        const api_url='https://dapi.kakao.com/v3/search/book?query=' + encodeURIComponent(req.query.query);
+        console.log('인코딩:',encodeURI(req.query.query))
+        const api_url='https://dapi.kakao.com/v3/search/book?query=' + encodeURI(req.query.query);
         let  option={
             size:req.query.size,
             page:req.query.page
