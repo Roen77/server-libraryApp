@@ -21,6 +21,11 @@ exports.isLoggedIn = (req, res, next) => {
       authed:true
     })
 
-    // // return res.status(401).redirect('http://localhost:3000')
-    // return res.status(401).redirect('https://vue.roen.pe.kr')
+  };
+  // 로그인 불필요
+  exports.isNitLoggedReDirect = (req, res, next) => {
+    if (!req.isAuthenticated()) {
+        return next();
+    }
+    return res.redirect('https://vue.roen.pe.kr')
   };

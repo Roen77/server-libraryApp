@@ -1,5 +1,5 @@
 const express=require('express');
-const {isLoggedIn,isNotLoggedIn} = require('./middleware');
+const {isLoggedIn,isNotLoggedIn,isNitLoggedReDirect} = require('./middleware');
 const passport = require('passport');
 const router = express.Router();
 const {upload,uploadImage}=require('../Controller/Image');
@@ -16,16 +16,16 @@ router.get('/',(req,res)=>{
 // 구글 로그인
 router.get('/google',isNotLoggedIn,passport.authenticate('google',{ scope: ['profile','email'], accessType:'offline',prompt:'consent' }));
 
-router.get('/google/callback', 
+router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/auth/failed' }),
   function(req, res) {
     res.redirect('http://vue.roen.pe.kr')
   });
 
 // kakao 로그인
-router.get('/kakao',isNotLoggedIn,passport.authenticate('kakao', {failureRedirect: 'auth/failed'}));
-  
-router.get('/kakao/oauth',isNotLoggedIn,passport.authenticate('kakao', {failureRedirect: 'auth/failed',}),function(req, res) {
+router.get('/kakao',isNitLoggedReDirect,passport.authenticate('kakao', {failureRedirect: 'auth/failed'}));
+
+router.get('/kakao/oauth',isNitLoggedReDirect,passport.authenticate('kakao', {failureRedirect: 'auth/failed',}),function(req, res) {
         // Successful authentication, redirect home.
         res.redirect('http://vue.roen.pe.kr')
       });
