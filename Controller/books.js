@@ -198,6 +198,11 @@ module.exports={
                         model:db.Comment,
                         order:[['updatedAt','DESC']],
                         include:[{model:db.User,attributes:['id','username']}]
+                    },
+                    {
+                        model:db.Hashtag,
+                        as:'Hashtags',
+
                     }]})
             return res.json({
                 success:true,
