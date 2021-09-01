@@ -40,7 +40,7 @@ if (prod) {
   app.use(hpp());
   // cors 에러 방지
 app.use(cors({
-  origin:process.env.CLIENT_URL,
+  origin:'https://vue.roen.pe.kr',
     credentials: true,
 }));
 } else {

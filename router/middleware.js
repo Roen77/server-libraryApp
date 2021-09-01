@@ -21,5 +21,5 @@ exports.isLoggedIn = (req, res, next) => {
     //   authed:true
     // })
     // return res.status(401).redirect('http://localhost:3000')
-    return res.status(401).redirect(process.env.CLIENT_URL)
+    return res.status(401).redirect('https://vue.roen.pe.kr')
   };
