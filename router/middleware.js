@@ -16,7 +16,7 @@ exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
         return next();
     }
-    return res.status(401).redirect.json({
+    return res.status(401).json({
       msg:'이미 로그인되어 있어 사용할 수 없습니다.',
       authed:true
     })
