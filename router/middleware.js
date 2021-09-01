@@ -19,7 +19,7 @@ exports.isLoggedIn = (req, res, next) => {
     return res.status(401).redirect.json({
       msg:'이미 로그인되어 있어 사용할 수 없습니다.',
       authed:true
-    }).redirect('https://vue.roen.pe.kr')
+    })
 
     // // return res.status(401).redirect('http://localhost:3000')
     // return res.status(401).redirect('https://vue.roen.pe.kr')
