@@ -1,3 +1,5 @@
+const dotenv=require('dotenv');
+dotenv.config();
 // 로그인 필요
 exports.isLoggedIn = (req, res, next) => {
     if (req.isAuthenticated()) {
