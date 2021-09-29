@@ -2,7 +2,7 @@ const express=require('express');
 const {isLoggedIn,isNotLoggedIn,isNitLoggedReDirect} = require('./middleware');
 const passport = require('passport');
 const router = express.Router();
-const {upload,uploadImage}=require('../Controller/Image');
+
 
 const authController=require('../Controller/auth');
 
@@ -36,8 +36,6 @@ router.post('/register',isNotLoggedIn,authController.register);
 router.post('/login',isNotLoggedIn,authController.login)
 // 로그아웃
 router.get('/logout',authController.logout);
-// 이미지  Amazon S3 버킷에 업로드
-router.post('/thumbnail',isLoggedIn,upload.single('photo'),uploadImage);
 // 사용자 정보 수정
 router.put('/',isLoggedIn,authController.changeUserinfo);
 // 사용자 정보 중 비밀번호 수정

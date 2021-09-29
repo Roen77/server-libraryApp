@@ -1,25 +1,24 @@
 const express=require('express');
 const {isLoggedIn,isNotLoggedIn} = require('./middleware');
 const bookController=require('../Controller/books');
-const hashController=require('../Controller/hashtag')
 const commentController=require("../Controller/comment")
-const {upload,uploadImage}=require('../Controller/Image');
 const router = express.Router();
 
 // 카카오 검색
 router.get('/search/kakao',isLoggedIn,bookController.kakaosearch);
 // 이미지 Amazon S3 버킷에 업로드 후 책 추가
-router.post('/add',isLoggedIn,upload.single('photo'),bookController.addBook);
+router.post('/add',isLoggedIn,bookController.addBook);
+// router.post('/add',isLoggedIn,upload.single('photo'),bookController.addBook);
 // 이미지 Amazon S3 버킷에 업로드 후 책 수정
-router.put('/:bookId',isLoggedIn,upload.single('photo'),bookController.updateBook);
+router.put('/:bookId',isLoggedIn,bookController.updateBook);
+// router.put('/:bookId',isLoggedIn,upload.single('photo'),bookController.updateBook);
 // 책 삭제
 router.delete('/:bookId',isLoggedIn,bookController.deleteBook);
 // 책들 가져오기
 router.get('/',isLoggedIn,bookController.fetchBooks);
 // 책 가져오기
 router.get('/:bookId',isLoggedIn,bookController.fetcbBook);
-// 이미지 Amazon S3 버킷에 업로드
-router.post('/thumbnail',isLoggedIn,upload.single('photo'),uploadImage);
+
 
 
 // 북마크
@@ -30,12 +29,12 @@ router.patch('/:bookId/removebookmark',isLoggedIn,bookController.removeBookmark)
 
 
 
-// 코멘트
-// 코멘트 가져오기
+// 댓글
+// 댓글 가져오기
 router.get('/:bookId/comments',isLoggedIn,commentController.fetchComments)
-// 코멘트 추가
+// 댓글 추가
 router.post('/:bookId/comment',isLoggedIn,commentController.addComment)
-// 코멘트 삭제
+// 댓글 삭제
 router.delete('/:bookId/comment/:commentId',isLoggedIn,commentController.deleteComment)
 
 //다른 사용자의 책들 가져오기

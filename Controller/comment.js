@@ -1,8 +1,8 @@
 const db = require('../models');
 const { Op } = require("sequelize");
-//코멘트는 유저 상관없이 전부다 쓸수 있다
+//댓글 유저 상관없이 전부다 쓸수 있다
 module.exports={
-    // 댓글(코멘트) 추가
+    // 댓글 추가
     async addComment(req,res,next){
         try {
             const book=await db.Book.findOne({where:{id:req.params.bookId}})
@@ -35,7 +35,7 @@ module.exports={
             return next(error);
         }
     },
-    // 댓글(코멘트) 가져오기
+    // 댓글 가져오기
     async fetchComments(req,res,next){
         try {
             const book=await db.Book.findOne({where:{id:req.params.bookId}})
@@ -64,7 +64,7 @@ module.exports={
                     }],
                     limit:parseInt(req.query.limit || 10),
                     order:[['updatedAt','DESC']]}
-                    ) 
+                    )
             const totalCount=await db.Comment.count({where:{BookId:req.params.bookId}})
             res.json({
                 success:true,
@@ -80,7 +80,7 @@ module.exports={
         }
 
     },
-    // 코멘트(댓글) 삭제
+    // 댓글 삭제
     async deleteComment(req,res,next){
         try {
             const book=await db.Book.findOne({where:{id:req.params.bookId}})
@@ -92,11 +92,11 @@ module.exports={
             }
             await db.Comment.destroy({
                 where:{
-                    [Op.and]: [{ UserId:req.user.id },{BookId:req.params.bookId},{id:req.params.commentId}],  
+                    [Op.and]: [{ UserId:req.user.id },{BookId:req.params.bookId},{id:req.params.commentId}],
                 }});
             res.json({
                 success:true,
-                msg:'코멘트 삭제 완료되었습니다.'
+                msg:'댓글 삭제 완료되었습니다.'
             })
         } catch (error) {
             console.error(error);

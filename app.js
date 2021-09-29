@@ -18,6 +18,7 @@ const userRouter= require('./router/user');
 const bookRouter=require('./router/books');
 const hashtagRouter=require('./router/hashtags')
 const profileRouter=require('./router/profile')
+const thumbnailRouter=require('./router/thumbnail')
 
 
 const app =express();
@@ -84,6 +85,7 @@ app.use('/user',userRouter);
 app.use('/books',bookRouter)
 app.use('/hashtags',hashtagRouter)
 app.use('/profiles',profileRouter);
+app.use('/thumbnail',thumbnailRouter);
 
 
 app.get('/',(req,res)=>{

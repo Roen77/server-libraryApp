@@ -18,7 +18,7 @@ module.exports={
             }
             const HashtagsList=await book.getHashtags()
             // 해당 책에 존자해는 해시태그의 갯수가 10개이상 이라면 추가할수 없게한다.(클라이언트에서도 이미 추가한 해시태그가 10개 이상이라면 추가할 수 없도록 구현하였습니다.)
-            if(HashtagsList.length>10){
+            if(HashtagsList.length>5){
                 return res.status(400).json({
                     msg:'더이상 해시태그를 추가할 수 없습니다.'
                 })
@@ -72,10 +72,15 @@ module.exports={
     // 해시태그 검색시, 해시태그 이름이 같은 책들을 가져온다.
     async getHashtagBooks(req,res,next){
         try {
-            let page=req.query.page;
+            let page=Number(req.query.page);
+            if(isNaN(page)){
+                return res.status(400).json({
+                    msg:'요청해주신 책들을 불러오지 못했습니다.'
+                })
+            }
             let limit=12;
             const offset=page?page*limit:0;
-            console.log(req.query.name,'알아서인코딩??')
+            console.log(typeof req.query.page,req.query.page,'알아서인코딩??')
             const books= await db.Book.findAll({
                limit,
                offset,
@@ -108,12 +113,20 @@ module.exports={
                      msg:'요청해주신 책이 존재하지 않습니다.'
                  })
              }
-           const totalCount=books.length
+
+           const totalCount=await db.Book.count({
+                include:[{
+                    model:db.Hashtag,
+                    where: {name:req.query.name},
+                    as:'Hashtags',
+                }]
+            })
+            console.log('토탈확인좀',totalCount)
            res.json({
                success:true,
                books,
                totalCount,
-               page,
+               page:page+1,
                totalPage:Math.ceil(totalCount/limit)?Math.ceil(totalCount/limit):0
            })
            return
