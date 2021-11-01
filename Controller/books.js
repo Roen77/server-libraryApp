@@ -56,7 +56,7 @@ module.exports={
             const {title,contents,url,isbn,authors,publisher,datetime,thumbnail} = req.body;
             // 책제목과 isbn,책저자가 같은 책이 있는 지 찾는다.
         const book=await db.Book.findOne({where:{
-            [Op.and]: [{ UserId:req.user.id },{title:title},{isbn:isbn},{publisher:publisher}],
+            [Op.and]: [{ UserId:req.user.id },{title:title},{isbn:isbn},{publisher:publisher},{contents:contents}],
         }})
         //  Amazon S3 버킷을 이용해 이미지를 저장한 후 req.file이 있다면, location를 저장하고,없다면 req.body.thumbnail를 저장한다.
         // let thumbnail=req.file?req.file.location:req.body.thumbnail

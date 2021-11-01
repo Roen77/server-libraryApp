@@ -4,6 +4,10 @@ const sequelize=require('sequelize');
 const moment=require('moment');
 
 // 날짜 포맷
+
+// `date_trunc` 함수를 이용해 `월`을 추출하여,
+// 월별로 데이터를 가져올 수 있도록 하였습니다.
+// https://www.postgresqltutorial.com/postgresql-date_trunc/
 const Format=(data,obj)=>{
     if(!obj){
         return data.filter(value=>value.dataValues).map(value=>value.dataValues.months=moment(value.dataValues.months).format("M"))
